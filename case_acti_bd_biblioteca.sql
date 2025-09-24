@@ -337,3 +337,16 @@ BEGIN
     WHERE id_emprestimo = @id_emprestimo;
 END;
 GO
+
+-- STATUS UPDATE
+CREATE PROCEDURE sp_atualizar_emprestimos_atrasados
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Emprestimo
+    SET status_emprestimo = 'EM_ATRASO'
+    WHERE status_emprestimo = 'EM_ANDAMENTO'
+      AND data_prevista < CAST(GETDATE() AS DATE)
+      AND data_devolucao IS NULL;
+END;
+GO
